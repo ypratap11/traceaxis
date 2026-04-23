@@ -45,3 +45,31 @@ export type UploadJob = {
   createdAt: string;
   incidentId?: string;
 };
+
+export type ReplayFrame = {
+  time: string;
+  title: string;
+  location: string;
+  narrative: string;
+  primaryMetric: string;
+};
+
+export type TraceItem = {
+  time: string;
+  label: string;
+  value: string;
+  tone: "normal" | "warning" | "info" | "danger";
+};
+
+export type InspectorTopic = {
+  name: string;
+  detail: string;
+  state: "watch" | "live";
+  preview: string;
+};
+
+export type ReplayBookmark = {
+  title: string;
+  time: string;
+  owner: string;
+};

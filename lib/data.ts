@@ -1,4 +1,13 @@
-import { EventMarker, Incident, Note, TimelineSignal } from "@/lib/types";
+import {
+  EventMarker,
+  Incident,
+  InspectorTopic,
+  Note,
+  ReplayBookmark,
+  ReplayFrame,
+  TimelineSignal,
+  TraceItem
+} from "@/lib/types";
 
 export const incidents: Incident[] = [
   {
@@ -113,21 +122,79 @@ export const incidentNotes: Note[] = [
   }
 ];
 
-export const commandTrace = [
+export const replayFrames: ReplayFrame[] = [
+  {
+    time: "05:48",
+    title: "Robot enters merge corridor",
+    location: "Waypoint M-08",
+    narrative: "Nominal path tracking. Localization is stable and aisle traffic is clear.",
+    primaryMetric: "Pose confidence 0.92"
+  },
+  {
+    time: "06:05",
+    title: "Cross-traffic begins to narrow lane",
+    location: "Waypoint M-11",
+    narrative: "A forklift starts crossing into the shared aisle, reducing landmark visibility and planner margin.",
+    primaryMetric: "Velocity command 0.82 m/s"
+  },
+  {
+    time: "06:12",
+    title: "Localization drops below stable threshold",
+    location: "Waypoint M-14",
+    narrative: "The perception stack loses clean landmark geometry and the localization estimate starts oscillating.",
+    primaryMetric: "Pose confidence 0.51"
+  },
+  {
+    time: "06:37",
+    title: "Planner recovery loop engages",
+    location: "Waypoint M-14",
+    narrative: "The robot enters recovery mode, holds forward motion, and begins re-localization attempts.",
+    primaryMetric: "Planner mode recovery"
+  },
+  {
+    time: "07:03",
+    title: "Mission abort is issued",
+    location: "Waypoint M-14",
+    narrative: "Recovery exceeds the safe retry window and the mission state machine escalates to abort.",
+    primaryMetric: "Mission state abort"
+  }
+];
+
+export const commandTrace: TraceItem[] = [
   { time: "06:05", label: "cmd_vel", value: "0.82 m/s", tone: "normal" },
   { time: "06:12", label: "pose_confidence", value: "0.51", tone: "warning" },
   { time: "06:28", label: "planner_mode", value: "recovery", tone: "info" },
   { time: "07:03", label: "mission_state", value: "abort", tone: "danger" }
 ];
 
-export const inspectorTopics = [
-  { name: "/localization/pose", detail: "421 msgs", state: "watch" },
-  { name: "/planner/state", detail: "88 msgs", state: "watch" },
-  { name: "/sensors/front_camera", detail: "video synced", state: "live" },
-  { name: "/control/cmd_vel", detail: "127 msgs", state: "watch" }
+export const inspectorTopics: InspectorTopic[] = [
+  {
+    name: "/localization/pose",
+    detail: "421 msgs",
+    state: "watch",
+    preview: "{ pose_confidence: 0.51, covariance: 0.18 }"
+  },
+  {
+    name: "/planner/state",
+    detail: "88 msgs",
+    state: "watch",
+    preview: "{ mode: 'recovery', retry_count: 3 }"
+  },
+  {
+    name: "/sensors/front_camera",
+    detail: "video synced",
+    state: "live",
+    preview: "{ frame_id: 147821, overlay: 'forklift-track' }"
+  },
+  {
+    name: "/control/cmd_vel",
+    detail: "127 msgs",
+    state: "watch",
+    preview: "{ linear_x: 0.00, angular_z: 0.21 }"
+  }
 ];
 
-export const replayBookmarks = [
+export const replayBookmarks: ReplayBookmark[] = [
   { title: "Forklift enters lane", time: "06:09", owner: "Ops Review" },
   { title: "Pose drops below threshold", time: "06:12", owner: "Autonomy Lead" },
   { title: "Mission abort decision", time: "07:03", owner: "Planner Team" }
