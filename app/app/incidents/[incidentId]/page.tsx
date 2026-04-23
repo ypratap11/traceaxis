@@ -2,8 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
 import { IncidentSummaryCard } from "@/components/incident-summary";
+import { ReplayStage } from "@/components/replay-stage";
 import { TelemetryChart } from "@/components/telemetry-chart";
 import { TimelineCard } from "@/components/timeline-card";
+import { TopicInspector } from "@/components/topic-inspector";
 import { eventMarkers } from "@/lib/data";
 import { getIncident } from "@/lib/store";
 
@@ -40,7 +42,7 @@ export default async function IncidentDetailPage({
         </div>
       }
     >
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
         <div className="space-y-5">
           <div className="panel p-5">
             <div className="grid gap-4 md:grid-cols-4">
@@ -62,60 +64,37 @@ export default async function IncidentDetailPage({
               </div>
             </div>
           </div>
-          <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="panel overflow-hidden">
-              <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
-                <div>
-                  <div className="eyebrow">Primary View</div>
-                  <h2 className="mt-2 text-xl font-semibold">Forward camera</h2>
-                </div>
-                <div className="font-mono text-sm text-white/45">T + 06:37</div>
-              </div>
-              <div className="h-[360px] bg-[radial-gradient(circle_at_top,rgba(76,242,197,0.18),transparent_22%),linear-gradient(180deg,#171d29_0%,#0d1017_100%)] p-5">
-                <div className="flex h-full items-end rounded-2xl border border-dashed border-white/10 bg-black/10 p-5">
-                  <div>
-                    <div className="text-sm uppercase tracking-[0.22em] text-white/40">Video Frame</div>
-                    <div className="mt-3 text-2xl font-semibold text-white">
-                      Forklift occlusion near waypoint M-14
-                    </div>
-                    <div className="mt-3 max-w-md text-sm leading-6 text-white/60">
-                      Future hook: actual frame playback, overlays, and message-aligned annotations.
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="panel p-5">
-              <div className="eyebrow">Event Stream</div>
-              <h2 className="mt-2 text-2xl font-semibold text-white">Anomalies and transitions</h2>
-              <div className="mt-5 space-y-3">
-                {eventMarkers.map((marker) => {
-                  const toneClass: Record<string, string> = {
-                    warning: "bg-warning/15 text-warning border-warning/20",
-                    danger: "bg-danger/15 text-danger border-danger/20",
-                    info: "bg-info/15 text-info border-info/20",
-                    accent: "bg-accent-500/15 text-accent-400 border-accent-500/20"
-                  };
-
-                  return (
-                    <div
-                      key={marker.id}
-                      className={`rounded-2xl border px-4 py-3 ${toneClass[marker.tone]}`}
-                    >
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="font-medium">{marker.label}</span>
-                        <span className="font-mono">{marker.timestamp}</span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
+          <ReplayStage />
           <TimelineCard />
           <TelemetryChart />
         </div>
         <div className="space-y-5">
+          <div className="panel p-5">
+            <div className="eyebrow">Event Stream</div>
+            <h2 className="mt-2 text-2xl font-semibold text-white">Anomalies and transitions</h2>
+            <div className="mt-5 space-y-3">
+              {eventMarkers.map((marker) => {
+                const toneClass: Record<string, string> = {
+                  warning: "bg-warning/15 text-warning border-warning/20",
+                  danger: "bg-danger/15 text-danger border-danger/20",
+                  info: "bg-info/15 text-info border-info/20",
+                  accent: "bg-accent-500/15 text-accent-400 border-accent-500/20"
+                };
+
+                return (
+                  <div
+                    key={marker.id}
+                    className={`rounded-[22px] border px-4 py-3 ${toneClass[marker.tone]}`}
+                  >
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="font-medium">{marker.label}</span>
+                      <span className="font-mono">{marker.timestamp}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
           <div className="panel p-5">
             <div className="eyebrow">Run Metadata</div>
             <div className="mt-4 space-y-4 text-sm">
@@ -141,6 +120,7 @@ export default async function IncidentDetailPage({
               <div className="control-chip">Status: {incident.status}</div>
             </div>
           </div>
+          <TopicInspector />
           <IncidentSummaryCard />
         </div>
       </div>

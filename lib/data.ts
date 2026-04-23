@@ -112,3 +112,23 @@ export const incidentNotes: Note[] = [
       "Need to check whether April map refresh shifted the aisle landmark geometry near waypoint M-14."
   }
 ];
+
+export const commandTrace = [
+  { time: "06:05", label: "cmd_vel", value: "0.82 m/s", tone: "normal" },
+  { time: "06:12", label: "pose_confidence", value: "0.51", tone: "warning" },
+  { time: "06:28", label: "planner_mode", value: "recovery", tone: "info" },
+  { time: "07:03", label: "mission_state", value: "abort", tone: "danger" }
+];
+
+export const inspectorTopics = [
+  { name: "/localization/pose", detail: "421 msgs", state: "watch" },
+  { name: "/planner/state", detail: "88 msgs", state: "watch" },
+  { name: "/sensors/front_camera", detail: "video synced", state: "live" },
+  { name: "/control/cmd_vel", detail: "127 msgs", state: "watch" }
+];
+
+export const replayBookmarks = [
+  { title: "Forklift enters lane", time: "06:09", owner: "Ops Review" },
+  { title: "Pose drops below threshold", time: "06:12", owner: "Autonomy Lead" },
+  { title: "Mission abort decision", time: "07:03", owner: "Planner Team" }
+];
