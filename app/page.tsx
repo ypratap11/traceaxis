@@ -35,10 +35,10 @@ export default function HomePage() {
                 Open Demo App
               </Link>
               <Link
-                href="/docs/incident-replay-startup-brief.md"
+                href="/app/incidents"
                 className="rounded-full border border-white/10 bg-white/[0.035] px-5 py-3 text-sm font-medium text-white/80 transition hover:bg-white/[0.06]"
               >
-                Review Product Brief
+                Preview Incident Console
               </Link>
             </div>
           </div>
