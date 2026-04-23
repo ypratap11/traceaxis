@@ -10,7 +10,7 @@ export default async function UploadsPage() {
       title="Run Uploads"
       subtitle="Manage ingestion jobs for ROS bags and structured log archives before they become replayable incidents."
       actions={
-        <button className="rounded-full bg-accent-500 px-4 py-2.5 text-sm font-semibold text-graphite-950">
+        <button className="control-chip-accent">
           New Upload
         </button>
       }
@@ -21,7 +21,7 @@ export default async function UploadsPage() {
           <div className="panel p-5">
             <div className="eyebrow">Ingestion Queue</div>
             <div className="mt-5 grid gap-4">
-              <div className="kpi">
+              <div className="metric-tile">
                 <div className="text-sm text-white/45">Queued</div>
                 <div className="mt-2 text-3xl font-semibold text-white">
                   {uploads.filter((upload) => upload.status === "queued").length
@@ -29,7 +29,7 @@ export default async function UploadsPage() {
                     .padStart(2, "0")}
                 </div>
               </div>
-              <div className="kpi">
+              <div className="metric-tile">
                 <div className="text-sm text-white/45">Processing</div>
                 <div className="mt-2 text-3xl font-semibold text-white">
                   {uploads.filter((upload) => upload.status === "processing").length
@@ -37,7 +37,7 @@ export default async function UploadsPage() {
                     .padStart(2, "0")}
                 </div>
               </div>
-              <div className="kpi">
+              <div className="metric-tile">
                 <div className="text-sm text-white/45">Ready</div>
                 <div className="mt-2 text-3xl font-semibold text-white">
                   {uploads.filter((upload) => upload.status === "ready").length
@@ -51,10 +51,7 @@ export default async function UploadsPage() {
             <div className="eyebrow">Recent Uploads</div>
             <div className="mt-4 space-y-3">
               {uploads.map((upload) => (
-                <div
-                  key={upload.id}
-                  className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3"
-                >
+                <div key={upload.id} className="panel-interactive px-4 py-4">
                   <div className="text-sm font-medium text-white">{upload.sourceName}</div>
                   <div className="mt-1 text-sm text-white/45">
                     {upload.robot} | {upload.site} | {upload.failureType}

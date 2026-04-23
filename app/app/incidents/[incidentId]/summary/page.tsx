@@ -25,11 +25,11 @@ export default async function IncidentSummaryPage({
         <div className="flex gap-3">
           <Link
             href={`/app/incidents/${incidentId}`}
-            className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white/75"
+            className="control-chip"
           >
             Back To Replay
           </Link>
-          <button className="rounded-full bg-accent-500 px-4 py-2.5 text-sm font-semibold text-graphite-950">
+          <button className="control-chip-accent">
             Export Report
           </button>
         </div>

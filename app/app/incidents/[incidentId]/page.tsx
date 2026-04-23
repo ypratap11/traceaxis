@@ -27,13 +27,13 @@ export default async function IncidentDetailPage({
         <div className="flex gap-3">
           <Link
             href={`/app/incidents/${incidentId}/compare`}
-            className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white/75"
+            className="control-chip"
           >
             Compare Run
           </Link>
           <Link
             href={`/app/incidents/${incidentId}/summary`}
-            className="rounded-full bg-accent-500 px-4 py-2.5 text-sm font-semibold text-graphite-950"
+            className="control-chip-accent"
           >
             View Summary
           </Link>
@@ -42,6 +42,26 @@ export default async function IncidentDetailPage({
     >
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-5">
+          <div className="panel p-5">
+            <div className="grid gap-4 md:grid-cols-4">
+              <div className="metric-tile">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-white/38">Robot</div>
+                <div className="mt-2 text-2xl font-semibold text-white">{incident.robot}</div>
+              </div>
+              <div className="metric-tile">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-white/38">Site</div>
+                <div className="mt-2 text-2xl font-semibold text-white">{incident.site}</div>
+              </div>
+              <div className="metric-tile">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-white/38">Version</div>
+                <div className="mt-2 text-2xl font-semibold text-white">{incident.softwareVersion}</div>
+              </div>
+              <div className="metric-tile">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-white/38">Window</div>
+                <div className="mt-2 text-2xl font-semibold text-white">{incident.duration}</div>
+              </div>
+            </div>
+          </div>
           <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
             <div className="panel overflow-hidden">
               <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
@@ -67,7 +87,7 @@ export default async function IncidentDetailPage({
             </div>
             <div className="panel p-5">
               <div className="eyebrow">Event Stream</div>
-              <h2 className="mt-2 text-xl font-semibold">Anomalies and transitions</h2>
+              <h2 className="mt-2 text-2xl font-semibold text-white">Anomalies and transitions</h2>
               <div className="mt-5 space-y-3">
                 {eventMarkers.map((marker) => {
                   const toneClass: Record<string, string> = {
@@ -115,6 +135,10 @@ export default async function IncidentDetailPage({
                 <span className="text-white/45">Duration</span>
                 <span className="font-medium text-white">{incident.duration}</span>
               </div>
+            </div>
+            <div className="mt-5 flex flex-wrap gap-2">
+              <div className="control-chip">Cause: {incident.failureType}</div>
+              <div className="control-chip">Status: {incident.status}</div>
             </div>
           </div>
           <IncidentSummaryCard />
