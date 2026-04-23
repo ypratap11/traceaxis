@@ -1,12 +1,23 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
 import { IncidentSummaryCard } from "@/components/incident-summary";
 import { TelemetryChart } from "@/components/telemetry-chart";
 import { TimelineCard } from "@/components/timeline-card";
-import { eventMarkers, incidents } from "@/lib/data";
+import { eventMarkers } from "@/lib/data";
+import { getIncident } from "@/lib/store";
 
-export default function IncidentDetailPage() {
-  const incident = incidents[0];
+export default async function IncidentDetailPage({
+  params
+}: {
+  params: Promise<{ incidentId: string }>;
+}) {
+  const { incidentId } = await params;
+  const incident = await getIncident(incidentId);
+
+  if (!incident) {
+    notFound();
+  }
 
   return (
     <AppShell
@@ -15,13 +26,13 @@ export default function IncidentDetailPage() {
       actions={
         <div className="flex gap-3">
           <Link
-            href={`/app/incidents/${incident.id}/compare`}
+            href={`/app/incidents/${incidentId}/compare`}
             className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white/75"
           >
             Compare Run
           </Link>
           <Link
-            href={`/app/incidents/${incident.id}/summary`}
+            href={`/app/incidents/${incidentId}/summary`}
             className="rounded-full bg-accent-500 px-4 py-2.5 text-sm font-semibold text-graphite-950"
           >
             View Summary
@@ -65,6 +76,7 @@ export default function IncidentDetailPage() {
                     info: "bg-info/15 text-info border-info/20",
                     accent: "bg-accent-500/15 text-accent-400 border-accent-500/20"
                   };
+
                   return (
                     <div
                       key={marker.id}

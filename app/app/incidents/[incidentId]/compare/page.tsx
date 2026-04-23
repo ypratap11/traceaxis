@@ -1,8 +1,9 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
 import { CompareStrip } from "@/components/compare-strip";
 import { TimelineCard } from "@/components/timeline-card";
-import { incidents } from "@/lib/data";
+import { getIncident } from "@/lib/store";
 
 function ComparePane({ label, detail }: { label: string; detail: string }) {
   return (
@@ -18,8 +19,17 @@ function ComparePane({ label, detail }: { label: string; detail: string }) {
   );
 }
 
-export default function IncidentComparePage() {
-  const incident = incidents[0];
+export default async function IncidentComparePage({
+  params
+}: {
+  params: Promise<{ incidentId: string }>;
+}) {
+  const { incidentId } = await params;
+  const incident = await getIncident(incidentId);
+
+  if (!incident) {
+    notFound();
+  }
 
   return (
     <AppShell
@@ -27,7 +37,7 @@ export default function IncidentComparePage() {
       subtitle="Contrast the failed run against a healthy baseline and surface the deviations that matter first."
       actions={
         <Link
-          href={`/app/incidents/${incident.id}`}
+          href={`/app/incidents/${incidentId}`}
           className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white/75"
         >
           Back To Replay
@@ -37,8 +47,8 @@ export default function IncidentComparePage() {
       <div className="space-y-5">
         <CompareStrip />
         <div className="grid gap-5 xl:grid-cols-2">
-          <ComparePane label="Failed Run" detail="AX-17 · 2026-04-22 19:42" />
-          <ComparePane label="Baseline Run" detail="AX-17 · 2026-04-20 10:18" />
+          <ComparePane label="Failed Run" detail={`${incident.robot} | ${incident.detectedAt}`} />
+          <ComparePane label="Baseline Run" detail={`${incident.robot} | 2026-04-20 10:18`} />
         </div>
         <TimelineCard />
       </div>

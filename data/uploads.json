@@ -1,0 +1,12 @@
+[
+  {
+    "id": "upl_seed_001",
+    "sourceName": "ax17-phoenix-20260422.bag",
+    "robot": "AX-17",
+    "site": "Phoenix DC",
+    "failureType": "Localization Loss",
+    "status": "ready",
+    "createdAt": "2026-04-23 11:24",
+    "incidentId": "inc_0423_localization"
+  }
+]

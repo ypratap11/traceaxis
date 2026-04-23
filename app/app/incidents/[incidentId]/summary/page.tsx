@@ -1,10 +1,21 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
 import { IncidentSummaryCard } from "@/components/incident-summary";
-import { eventMarkers, incidents } from "@/lib/data";
+import { eventMarkers } from "@/lib/data";
+import { getIncident } from "@/lib/store";
 
-export default function IncidentSummaryPage() {
-  const incident = incidents[0];
+export default async function IncidentSummaryPage({
+  params
+}: {
+  params: Promise<{ incidentId: string }>;
+}) {
+  const { incidentId } = await params;
+  const incident = await getIncident(incidentId);
+
+  if (!incident) {
+    notFound();
+  }
 
   return (
     <AppShell
@@ -13,7 +24,7 @@ export default function IncidentSummaryPage() {
       actions={
         <div className="flex gap-3">
           <Link
-            href={`/app/incidents/${incident.id}`}
+            href={`/app/incidents/${incidentId}`}
             className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white/75"
           >
             Back To Replay

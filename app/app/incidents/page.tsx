@@ -1,7 +1,10 @@
 import { AppShell } from "@/components/app-shell";
 import { IncidentList } from "@/components/incident-list";
+import { listIncidents } from "@/lib/store";
 
-export default function IncidentsPage() {
+export default async function IncidentsPage() {
+  const incidents = await listIncidents();
+
   return (
     <AppShell
       title="Incident Inbox"
@@ -18,22 +21,32 @@ export default function IncidentsPage() {
       }
     >
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
-        <IncidentList />
+        <IncidentList incidents={incidents} />
         <div className="space-y-5">
           <div className="panel p-5">
             <div className="eyebrow">Today</div>
             <div className="mt-4 grid gap-4">
               <div className="kpi">
                 <div className="text-sm text-white/45">New incidents</div>
-                <div className="mt-2 text-3xl font-semibold text-white">03</div>
+                <div className="mt-2 text-3xl font-semibold text-white">
+                  {incidents.filter((incident) => incident.status === "new").length
+                    .toString()
+                    .padStart(2, "0")}
+                </div>
               </div>
               <div className="kpi">
                 <div className="text-sm text-white/45">Investigating</div>
-                <div className="mt-2 text-3xl font-semibold text-white">02</div>
+                <div className="mt-2 text-3xl font-semibold text-white">
+                  {incidents.filter((incident) => incident.status === "investigating").length
+                    .toString()
+                    .padStart(2, "0")}
+                </div>
               </div>
               <div className="kpi">
-                <div className="text-sm text-white/45">Resolved this week</div>
-                <div className="mt-2 text-3xl font-semibold text-white">11</div>
+                <div className="text-sm text-white/45">Total incidents</div>
+                <div className="mt-2 text-3xl font-semibold text-white">
+                  {incidents.length.toString().padStart(2, "0")}
+                </div>
               </div>
             </div>
           </div>

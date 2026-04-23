@@ -1,0 +1,41 @@
+[
+  {
+    "id": "inc_0423_localization",
+    "title": "Localization drift before aisle merge",
+    "robot": "AX-17",
+    "site": "Phoenix DC",
+    "severity": "critical",
+    "status": "investigating",
+    "failureType": "Localization Loss",
+    "detectedAt": "2026-04-22 19:42",
+    "softwareVersion": "v0.9.14",
+    "duration": "09m 14s",
+    "summary": "Pose confidence degraded during a congested merge. Planner entered recovery, then mission aborted."
+  },
+  {
+    "id": "inc_0422_docking",
+    "title": "Docking abort after battery sag",
+    "robot": "AX-04",
+    "site": "Long Beach Lab",
+    "severity": "high",
+    "status": "new",
+    "failureType": "Battery Sag",
+    "detectedAt": "2026-04-22 08:15",
+    "softwareVersion": "v0.9.14",
+    "duration": "04m 49s",
+    "summary": "Voltage drop triggered a safety rollback during docking. Recovery succeeded on second attempt."
+  },
+  {
+    "id": "inc_0421_network",
+    "title": "Mission timeout after network disconnect",
+    "robot": "AX-21",
+    "site": "Seattle Test Floor",
+    "severity": "medium",
+    "status": "resolved",
+    "failureType": "Network Disconnect",
+    "detectedAt": "2026-04-21 13:07",
+    "softwareVersion": "v0.9.13",
+    "duration": "06m 01s",
+    "summary": "Telemetry dropped for 14 seconds during route update and mission state machine timed out."
+  }
+]

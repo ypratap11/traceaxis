@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { incidents } from "@/lib/data";
 import { SeverityBadge, StatusBadge } from "@/components/status-badge";
+import { Incident } from "@/lib/types";
 
-export function IncidentList() {
+export function IncidentList({ incidents }: { incidents: Incident[] }) {
   return (
     <div className="panel overflow-hidden">
       <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">

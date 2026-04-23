@@ -34,3 +34,14 @@ export type Note = {
   timestamp: string;
   body: string;
 };
+
+export type UploadJob = {
+  id: string;
+  sourceName: string;
+  robot: string;
+  site: string;
+  failureType: string;
+  status: "queued" | "processing" | "ready" | "failed";
+  createdAt: string;
+  incidentId?: string;
+};
