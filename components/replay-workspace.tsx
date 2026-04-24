@@ -86,7 +86,7 @@ function ReplayBody({ incident }: { incident: Incident }) {
       </div>
       <div className="border-t border-line bg-surface-0 px-5 py-3">
         <Scrubber
-          events={[]}
+          events={events}
           currentMs={currentMs}
           durationMs={durationMs}
           isPlaying={isPlaying}
