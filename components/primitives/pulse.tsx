@@ -1,5 +1,5 @@
 type Props = {
-  active?: boolean;
+  breathing?: boolean;
   size?: "sm" | "md" | "lg";
 };
 
@@ -9,14 +9,14 @@ const sizeClass = {
   lg: "h-3.5 w-3.5"
 } as const;
 
-export function Pulse({ active = true, size = "md" }: Props) {
+export function Pulse({ breathing = true, size = "md" }: Props) {
+  const animation = breathing ? "animate-breath motion-reduce:animate-none" : "";
+
   return (
     <span
       data-testid="pulse"
       aria-hidden="true"
-      className={`inline-block rounded-full bg-bloom ${sizeClass[size]} ${
-        active ? "animate-breath" : ""
-      }`}
+      className={`inline-block rounded-full bg-bloom ${sizeClass[size]} ${animation}`.trim()}
     />
   );
 }
