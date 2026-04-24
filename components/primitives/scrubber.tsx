@@ -1,6 +1,6 @@
 "use client";
 
-import type { MouseEvent } from "react";
+import type { KeyboardEvent, MouseEvent } from "react";
 
 export type ScrubberEvent = {
   id: string;
@@ -16,6 +16,7 @@ type Props = {
   onSeek: (ms: number) => void;
   onPlayToggle?: () => void;
   isPlaying?: boolean;
+  label?: string;
 };
 
 const sevColor: Record<ScrubberEvent["severity"], string> = {
@@ -36,21 +37,49 @@ function fmt(ms: number) {
   )}.${String(millis).padStart(3, "0")}`;
 }
 
+const KEY_STEP_MS = 100;
+
 export function Scrubber({
   events,
   currentMs,
   durationMs,
   onSeek,
   onPlayToggle,
-  isPlaying = false
+  isPlaying = false,
+  label = "Mission timeline"
 }: Props) {
   const safeDuration = Math.max(durationMs, 1);
-  const progressPct = Math.min(100, (currentMs / safeDuration) * 100);
+  const progressPct = Math.min(100, Math.max(0, (currentMs / safeDuration) * 100));
+
+  const seekClamped = (ms: number) => {
+    onSeek(Math.max(0, Math.min(safeDuration, ms)));
+  };
 
   const handleTrackClick = (e: MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const ratio = (e.clientX - rect.left) / rect.width;
     onSeek(Math.round(ratio * safeDuration));
+  };
+
+  const handleTrackKey = (e: KeyboardEvent<HTMLDivElement>) => {
+    switch (e.key) {
+      case "ArrowLeft":
+        e.preventDefault();
+        seekClamped(currentMs - KEY_STEP_MS);
+        return;
+      case "ArrowRight":
+        e.preventDefault();
+        seekClamped(currentMs + KEY_STEP_MS);
+        return;
+      case "Home":
+        e.preventDefault();
+        onSeek(0);
+        return;
+      case "End":
+        e.preventDefault();
+        onSeek(safeDuration);
+        return;
+    }
   };
 
   const axisLabels = Array.from({ length: 5 }, (_, i) =>
@@ -72,7 +101,7 @@ export function Scrubber({
           <button
             type="button"
             aria-label="previous"
-            onClick={() => onSeek(Math.max(0, currentMs - 1000))}
+            onClick={() => seekClamped(currentMs - 1000)}
             className="flex h-6 w-6 items-center justify-center rounded-xs border border-line-strong text-ink-1 transition hover:text-ink-0"
           >
             ‹‹
@@ -88,7 +117,7 @@ export function Scrubber({
           <button
             type="button"
             aria-label="next"
-            onClick={() => onSeek(Math.min(safeDuration, currentMs + 1000))}
+            onClick={() => seekClamped(currentMs + 1000)}
             className="flex h-6 w-6 items-center justify-center rounded-xs border border-line-strong text-ink-1 transition hover:text-ink-0"
           >
             ››
@@ -97,12 +126,20 @@ export function Scrubber({
 
         <div
           data-scrub-track
+          role="slider"
+          tabIndex={0}
+          aria-label={label}
+          aria-valuemin={0}
+          aria-valuemax={durationMs}
+          aria-valuenow={currentMs}
+          aria-valuetext={`T+${fmt(currentMs)}`}
           onClick={handleTrackClick}
-          className="relative h-9 flex-1 cursor-pointer select-none"
+          onKeyDown={handleTrackKey}
+          className="relative h-9 flex-1 cursor-pointer select-none focus:outline-none focus-visible:ring-1 focus-visible:ring-bloom"
         >
-          <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-line" />
+          <div className="pointer-events-none absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-line" />
           <div
-            className="absolute left-0 top-1/2 h-px -translate-y-1/2 rounded-full shadow-bloom"
+            className="pointer-events-none absolute left-0 top-1/2 h-px -translate-y-1/2 rounded-full shadow-bloom"
             style={{
               width: `${progressPct}%`,
               background:
@@ -122,24 +159,29 @@ export function Scrubber({
                   e.stopPropagation();
                   onSeek(evt.ms);
                 }}
-                className="absolute top-1/2 h-3.5 w-px -translate-y-1/2"
-                style={{
-                  left: `${left}%`,
-                  background: sevColor[evt.severity],
-                  boxShadow: `0 0 6px ${sevColor[evt.severity]}`
-                }}
-              />
+                className="absolute top-1/2 flex h-full w-3 -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-transparent"
+                style={{ left: `${left}%` }}
+              >
+                <span
+                  aria-hidden="true"
+                  className="block h-3.5 w-px"
+                  style={{
+                    background: sevColor[evt.severity],
+                    boxShadow: `0 0 6px ${sevColor[evt.severity]}`
+                  }}
+                />
+              </button>
             );
           })}
           <div
             aria-hidden="true"
-            className="absolute top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-bloom shadow-bloom-strong"
+            className="pointer-events-none absolute top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-bloom shadow-bloom-strong"
             style={{ left: `${progressPct}%` }}
           />
         </div>
       </div>
 
-      <div className="mt-2 flex justify-between pl-[88px] font-mono text-[10px] text-ink-3">
+      <div className="mt-2 flex justify-between pl-[92px] font-mono text-[10px] text-ink-3">
         {axisLabels.map((label) => (
           <span key={label}>{label}</span>
         ))}
