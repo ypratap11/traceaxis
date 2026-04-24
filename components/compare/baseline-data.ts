@@ -42,8 +42,8 @@ export function buildBaselineSignals() {
 export function buildCompareDiffs(): Diff[] {
   return [
     {
-      label: "Localization confidence",
-      delta: "−32% in failed run",
+      label: "Localization drift",
+      delta: "−32% lower",
       worse: "left"
     },
     {
