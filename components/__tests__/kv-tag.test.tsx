@@ -19,10 +19,10 @@ describe("KvTag", () => {
     expect(screen.getByTestId("custom")).toBeInTheDocument();
   });
 
-  it("renders the solid time-pill variant in mono", () => {
+  it("solid variant uses mono type for tabular alignment", () => {
     render(<KvTag variant="solid" v="T+04:12.380" />);
-    const el = screen.getByText("T+04:12.380");
-    expect(el.parentElement).toHaveClass("font-mono");
-    expect(el.parentElement).toHaveClass("bg-ink-0");
+    const el = screen.getByTestId("kv-tag-solid");
+    expect(el).toHaveClass("font-mono");
+    expect(el).toHaveTextContent("T+04:12.380");
   });
 });

@@ -9,8 +9,11 @@ type Props = {
 export function KvTag({ k, v, variant = "default" }: Props) {
   if (variant === "solid") {
     return (
-      <span className="inline-flex items-center rounded-sm bg-ink-0 px-3 py-1 font-mono text-[11px] font-semibold text-surface-0">
-        <span>{v}</span>
+      <span
+        data-testid="kv-tag-solid"
+        className="inline-flex items-center rounded-sm bg-ink-0 px-3 py-1 font-mono text-[11px] font-semibold text-surface-0"
+      >
+        {v}
       </span>
     );
   }
