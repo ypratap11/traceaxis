@@ -20,7 +20,7 @@ export function UploadRow({ upload }: Props) {
           {upload.sourceName}
         </div>
         <div className="mt-0.5 text-[11px] text-ink-3">
-          {upload.robot} · {upload.site} · {upload.failureType}
+          {upload.robot} | {upload.site} | {upload.failureType}
         </div>
         {upload.status === "processing" && (
           <div

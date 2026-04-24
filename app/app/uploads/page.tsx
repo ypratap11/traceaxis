@@ -19,7 +19,7 @@ export default async function UploadsPage() {
     >
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-4">
-          <DropzoneWithServerFallback />
+          <SampleUploadSeeder />
           <Panel eyebrow="Recent uploads" bodyClassName="p-0">
             {uploads.length === 0 ? (
               <div className="px-4 py-8 text-center text-sm text-ink-3">
@@ -37,59 +37,45 @@ export default async function UploadsPage() {
           </Panel>
         </div>
         <aside className="space-y-3">
-          <MetricTile
-            label="Queued"
-            value={String(countQueued).padStart(2, "0")}
-          />
+          <MetricTile label="Queued" value={String(countQueued).padStart(2, "0")} />
           <MetricTile
             label="Processing"
             value={String(countProcessing).padStart(2, "0")}
           />
-          <MetricTile
-            label="Ready"
-            value={String(countReady).padStart(2, "0")}
-          />
+          <MetricTile label="Ready" value={String(countReady).padStart(2, "0")} />
         </aside>
       </div>
     </AppShell>
   );
 }
 
-// Until a real file picker is wired in, Browse submits a pre-filled
-// form that creates a sample upload via POST /api/uploads. The backend
-// currently requires a full incident record, which the dropzone pattern
-// alone can't provide. Replacing this is deferred to a future plan.
-function DropzoneWithServerFallback() {
+// Until real file ingestion exists, this form explicitly creates
+// a sample upload and linked incident. It should not pretend to pick a file.
+function SampleUploadSeeder() {
   return (
     <form action="/api/uploads" method="post">
       <input type="hidden" name="title" value="New upload" />
       <input type="hidden" name="robot" value="AX-31" />
       <input type="hidden" name="site" value="Dallas Pilot" />
       <input type="hidden" name="failureType" value="Planner Timeout" />
-      <input
-        type="hidden"
-        name="sourceName"
-        value="ax31-dallas-placeholder.bag"
-      />
+      <input type="hidden" name="sourceName" value="ax31-dallas-placeholder.bag" />
       <input type="hidden" name="softwareVersion" value="v0.9.15" />
       <div className="flex flex-col items-center gap-3 rounded-md border border-dashed border-line-strong bg-surface-1 px-6 py-12 text-center">
         <div
           aria-hidden="true"
           className="flex h-10 w-10 items-center justify-center rounded-sm border border-line-strong text-ink-2"
         >
-          ↑
+          S
         </div>
-        <div className="text-sm font-medium text-ink-0">
-          Drop a ROS bag or log archive
-        </div>
+        <div className="text-sm font-medium text-ink-0">Seed a sample upload</div>
         <div className="max-w-md text-xs leading-5 text-ink-3">
-          Upload a single file up to 2 GB. ROS2 bag and structured log archives supported.
+          Creates a placeholder incident using sample metadata until real file ingestion is wired.
         </div>
         <button
           type="submit"
           className="mt-2 rounded-xs bg-ink-0 px-3 py-1.5 text-xs font-semibold text-surface-0"
         >
-          Browse
+          Create sample incident
         </button>
       </div>
     </form>

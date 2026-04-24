@@ -90,8 +90,7 @@ export function Scrubber({
     <div className="rounded-md border border-line bg-surface-1 px-5 py-3.5">
       <div className="mb-2 flex items-center justify-between text-[11px] text-ink-3">
         <span>
-          Mission window · {(safeDuration / 1000).toFixed(2)} s ·{" "}
-          {events.length} events
+          Mission window | {(safeDuration / 1000).toFixed(2)} s | {events.length} events
         </span>
         <span className="font-mono text-bloom">T+{fmt(currentMs)}</span>
       </div>
@@ -104,7 +103,7 @@ export function Scrubber({
             onClick={() => seekClamped(currentMs - 1000)}
             className="flex h-6 w-6 items-center justify-center rounded-xs border border-line-strong text-ink-1 transition hover:text-ink-0"
           >
-            ‹‹
+            {"<<"}
           </button>
           <button
             type="button"
@@ -112,7 +111,7 @@ export function Scrubber({
             onClick={onPlayToggle}
             className="flex h-6 w-6 items-center justify-center rounded-xs border border-ink-0 bg-ink-0 text-surface-0"
           >
-            {isPlaying ? "❚❚" : "▶"}
+            {isPlaying ? "||" : ">"}
           </button>
           <button
             type="button"
@@ -120,7 +119,7 @@ export function Scrubber({
             onClick={() => seekClamped(currentMs + 1000)}
             className="flex h-6 w-6 items-center justify-center rounded-xs border border-line-strong text-ink-1 transition hover:text-ink-0"
           >
-            ››
+            {">>"}
           </button>
         </div>
 
@@ -182,8 +181,8 @@ export function Scrubber({
       </div>
 
       <div className="mt-2 flex justify-between pl-[92px] font-mono text-[10px] text-ink-3">
-        {axisLabels.map((label) => (
-          <span key={label}>{label}</span>
+        {axisLabels.map((axisLabel) => (
+          <span key={axisLabel}>{axisLabel}</span>
         ))}
       </div>
     </div>

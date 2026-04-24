@@ -44,10 +44,10 @@ export default function HomePage() {
               View sample incident
             </Link>
             <Link
-              href="/app/incidents"
+              href="/#workflow"
               className="rounded-xs border border-line-strong px-4 py-2 text-xs font-medium text-ink-1 transition hover:border-ink-3 hover:text-ink-0"
             >
-              Book demo
+              See workflow
             </Link>
           </div>
         </section>
@@ -58,7 +58,7 @@ export default function HomePage() {
           </div>
           <ScrubberHero events={events} durationMs={durationMs} />
           <p className="max-w-2xl text-xs leading-6 text-ink-3">
-            The same timeline that drives the replay console — playing a sample
+            The same timeline that drives the replay console - playing a sample
             incident end-to-end. Click any marker to seek.
           </p>
         </section>
@@ -89,8 +89,8 @@ export default function HomePage() {
 
         <footer className="border-t border-line pt-6 text-xs text-ink-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <span>TraceAxis · incident replay for robotics teams</span>
-            <span className="font-mono">© 2026</span>
+            <span>TraceAxis - incident replay for robotics teams</span>
+            <span className="font-mono">(c) 2026</span>
           </div>
         </footer>
       </main>
