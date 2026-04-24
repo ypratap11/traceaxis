@@ -91,7 +91,7 @@ export function Scrubber({
       <div className="mb-2 flex items-center justify-between text-[11px] text-ink-3">
         <span>
           Mission window · {(safeDuration / 1000).toFixed(2)} s ·{" "}
-          {events.length} events
+          {events.length} markers
         </span>
         <span className="font-mono text-bloom">T+{fmt(currentMs)}</span>
       </div>
