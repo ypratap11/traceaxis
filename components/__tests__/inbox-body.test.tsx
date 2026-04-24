@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { InboxBody } from "@/components/inbox/inbox-body";
 import type { Incident } from "@/lib/types";
@@ -66,6 +66,7 @@ describe("InboxBody", () => {
   it("filters by status when a status pill is toggled", async () => {
     const user = userEvent.setup();
     render(<InboxBody incidents={incidents} />);
+    // "New" the filter pill lives in the filter rail; click it
     await user.click(screen.getByRole("button", { name: "New" }));
     expect(screen.getByText("Battery sag")).toBeInTheDocument();
     expect(screen.queryByText("Localization drift")).toBeNull();
@@ -83,8 +84,12 @@ describe("InboxBody", () => {
 
   it("renders today metric tiles in the right rail", () => {
     render(<InboxBody incidents={incidents} />);
-    expect(screen.getByText(/new incidents/i)).toBeInTheDocument();
-    expect(screen.getByText(/investigating/i)).toBeInTheDocument();
+    const rail = screen.getByTestId("inbox-right-rail");
+    // Scope the MetricTile labels to the right rail so we don't collide
+    // with StatusBadge text inside the IncidentTableRows in the center.
+    expect(within(rail).getByText(/new incidents/i)).toBeInTheDocument();
+    expect(within(rail).getByText(/investigating/i)).toBeInTheDocument();
+    expect(within(rail).getByText(/total/i)).toBeInTheDocument();
   });
 
   it("shows an empty state when filters match no incidents", async () => {

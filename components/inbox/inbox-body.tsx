@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { Incident, IncidentSeverity, IncidentStatus } from "@/lib/types";
 import { FilterGroup } from "@/components/primitives/filter-group";
+import { IncidentTableRow } from "@/components/primitives/incident-table-row";
 import { MetricTile } from "@/components/primitives/metric-tile";
 import { Panel } from "@/components/primitives/panel";
 import { RecurringClusterPanel } from "@/components/inbox/recurring-cluster-panel";
@@ -17,7 +17,7 @@ const severityOptions: { value: IncidentSeverity; label: string }[] = [
 
 const statusOptions: { value: IncidentStatus; label: string }[] = [
   { value: "new", label: "New" },
-  { value: "investigating", label: "In Progress" },
+  { value: "investigating", label: "Investigating" },
   { value: "resolved", label: "Resolved" }
 ];
 
@@ -64,15 +64,10 @@ export function InboxBody({ incidents }: Props) {
   const filtered = useMemo(() => {
     return incidents.filter((inc) => {
       if (sevFilter.length && !sevFilter.includes(inc.severity)) return false;
-      if (statusFilter.length && !statusFilter.includes(inc.status))
-        return false;
+      if (statusFilter.length && !statusFilter.includes(inc.status)) return false;
       if (robotFilter.length && !robotFilter.includes(inc.robot)) return false;
       if (siteFilter.length && !siteFilter.includes(inc.site)) return false;
-      if (
-        versionFilter.length &&
-        !versionFilter.includes(inc.softwareVersion)
-      )
-        return false;
+      if (versionFilter.length && !versionFilter.includes(inc.softwareVersion)) return false;
       return true;
     });
   }, [incidents, sevFilter, statusFilter, robotFilter, siteFilter, versionFilter]);
@@ -130,29 +125,15 @@ export function InboxBody({ incidents }: Props) {
         ) : (
           <ul>
             {filtered.map((incident) => (
-              <li key={incident.id} aria-label={incident.title}>
-                <Link
-                  href={`/app/incidents/${incident.id}`}
-                  className="grid grid-cols-[minmax(0,2fr)_1fr_1fr] items-center gap-4 border-b border-line px-4 py-3 text-xs transition-colors hover:bg-surface-2/40"
-                >
-                  <div>
-                    <div className="font-medium text-ink-0">
-                      {incident.title}
-                    </div>
-                    <div className="mt-0.5 text-[11px] text-ink-3">
-                      {incident.failureType}
-                    </div>
-                  </div>
-                  <div className="text-ink-1">{incident.robot}</div>
-                  <div className="text-ink-1">{incident.site}</div>
-                </Link>
+              <li key={incident.id}>
+                <IncidentTableRow incident={incident} />
               </li>
             ))}
           </ul>
         )}
       </Panel>
 
-      <aside className="space-y-4">
+      <aside data-testid="inbox-right-rail" className="space-y-4">
         <div className="space-y-3">
           <MetricTile
             label="New incidents"
