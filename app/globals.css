@@ -4,54 +4,56 @@
 
 :root {
   color-scheme: dark;
+
+  --surface-0: #0b0e13;
+  --surface-1: #10151c;
+  --surface-2: #171d27;
+  --line: #1d232c;
+  --line-strong: #2a3038;
+  --ink-0: #f5f7fa;
+  --ink-1: #d1d5db;
+  --ink-2: #8b95a3;
+  --ink-3: #5b6573;
+  --data-bloom: #ff9f50;
+  --data-bloom-soft: rgba(255, 159, 80, 0.14);
+  --data-bloom-tint: #ffb47a;
+  --ok: #5cd6a8;
+  --warn: #ffc857;
+  --err: #ff6e7a;
+  --info: #7ab7ff;
+
+  --ease-out: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Legacy aliases — kept until Plan 5 strips old-class usage. */
   --bg-0: #06070b;
   --bg-1: #0d1118;
   --bg-2: #121826;
   --panel: rgba(12, 16, 24, 0.84);
   --panel-strong: rgba(18, 25, 38, 0.92);
-  --line: rgba(255, 255, 255, 0.08);
-  --line-strong: rgba(255, 255, 255, 0.14);
-  --copy: #edf2f7;
-  --muted: rgba(231, 238, 246, 0.64);
+  --copy: var(--ink-0);
+  --muted: var(--ink-2);
 }
 
-html {
-  background:
-    radial-gradient(circle at top left, rgba(23, 199, 157, 0.18), transparent 26%),
-    radial-gradient(circle at top right, rgba(103, 167, 255, 0.12), transparent 22%),
-    linear-gradient(180deg, #05060a 0%, #0a0e15 52%, #05060a 100%);
+html,
+body {
+  background: var(--surface-0);
 }
 
 body {
   min-height: 100vh;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0)),
-    radial-gradient(circle at 18% 0%, rgba(76, 242, 197, 0.08), transparent 22%);
-  color: var(--copy);
-  font-family: "Space Grotesk", "Aptos", "Segoe UI", sans-serif;
+  color: var(--ink-1);
+  font-family: var(--font-plex-sans), system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
   position: relative;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(circle at center, black, transparent 82%);
-  opacity: 0.28;
-}
-
 * {
-  border-color: rgba(255, 255, 255, 0.08);
+  border-color: var(--line);
 }
 
 ::selection {
-  background: rgba(76, 242, 197, 0.3);
-  color: #f8fafc;
+  background: rgba(255, 159, 80, 0.3);
+  color: var(--ink-0);
 }
 
 @layer base {
@@ -59,46 +61,52 @@ body::before {
   h2,
   h3,
   h4 {
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
+    color: var(--ink-0);
   }
 
   p {
-    color: var(--muted);
+    color: var(--ink-1);
   }
 }
 
+/*
+ * Legacy utility classes — kept so existing screens still render during the
+ * incremental rebuild. These are removed in the final UI redesign plan once
+ * every screen has been migrated to the new component primitives.
+ */
 @layer components {
   .panel {
-    @apply rounded-[28px] border shadow-panel backdrop-blur-md;
-    background: linear-gradient(180deg, rgba(18, 25, 38, 0.82), rgba(10, 14, 21, 0.92));
+    @apply rounded-lg border;
+    background: var(--surface-1);
     border-color: var(--line);
   }
 
   .panel-muted {
-    @apply rounded-[24px] border;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02));
-    border-color: rgba(255, 255, 255, 0.08);
+    @apply rounded-md border;
+    background: var(--surface-1);
+    border-color: var(--line);
   }
 
   .panel-interactive {
-    @apply rounded-[24px] border transition duration-200;
-    background: linear-gradient(180deg, rgba(24, 31, 45, 0.75), rgba(11, 15, 22, 0.95));
-    border-color: rgba(255, 255, 255, 0.08);
+    @apply rounded-md border transition;
+    background: var(--surface-1);
+    border-color: var(--line);
   }
 
   .panel-interactive:hover {
-    border-color: rgba(76, 242, 197, 0.24);
-    transform: translateY(-1px);
+    border-color: var(--line-strong);
   }
 
   .eyebrow {
-    @apply text-[11px] font-semibold uppercase tracking-[0.32em] text-accent-400;
+    @apply text-[10px] font-semibold uppercase tracking-[0.22em];
+    color: var(--ink-3);
   }
 
   .kpi {
-    @apply rounded-[22px] border px-4 py-4;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.025));
-    border-color: rgba(255, 255, 255, 0.08);
+    @apply rounded-md border px-4 py-4;
+    background: var(--surface-1);
+    border-color: var(--line);
   }
 
   .status-dot {
@@ -106,38 +114,37 @@ body::before {
   }
 
   .control-chip {
-    @apply inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium transition;
-    background: rgba(255, 255, 255, 0.035);
-    border-color: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.82);
+    @apply inline-flex items-center gap-2 rounded-sm border px-3 py-1.5 text-xs font-medium transition;
+    background: transparent;
+    border-color: var(--line-strong);
+    color: var(--ink-1);
   }
 
   .control-chip:hover {
-    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--ink-3);
+    color: var(--ink-0);
   }
 
   .control-chip-accent {
-    @apply inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-graphite-950 transition;
-    background: linear-gradient(135deg, #4cf2c5 0%, #17c79d 100%);
-    box-shadow: 0 12px 30px rgba(23, 199, 157, 0.22);
+    @apply inline-flex items-center gap-2 rounded-sm px-3 py-1.5 text-xs font-semibold transition;
+    background: var(--ink-0);
+    color: var(--surface-0);
   }
 
   .metric-tile {
-    @apply rounded-[24px] border p-4;
-    background:
-      radial-gradient(circle at top right, rgba(76, 242, 197, 0.12), transparent 38%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.018));
-    border-color: rgba(255, 255, 255, 0.08);
+    @apply rounded-md border p-4;
+    background: var(--surface-1);
+    border-color: var(--line);
   }
 
   .field-shell {
-    @apply rounded-[20px] border px-4 py-3 outline-none transition;
-    background: rgba(255, 255, 255, 0.035);
-    border-color: rgba(255, 255, 255, 0.1);
+    @apply rounded-sm border px-3 py-2 outline-none transition;
+    background: var(--surface-1);
+    border-color: var(--line);
   }
 
   .field-shell:focus {
-    border-color: rgba(76, 242, 197, 0.36);
-    box-shadow: 0 0 0 4px rgba(76, 242, 197, 0.08);
+    border-color: var(--data-bloom);
+    box-shadow: 0 0 0 3px var(--data-bloom-soft);
   }
 }
