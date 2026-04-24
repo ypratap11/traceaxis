@@ -34,18 +34,7 @@ function CompareInner({ incident }: { incident: Incident }) {
     label: s.label,
     values: s.values
   }));
-  // Abbreviate baseline labels so they don't collide with primary-side sparkline labels
-  // in DOM queries (e.g., "Localization Confidence" → "Loc. Confidence [B]").
-  const baselineSignals = buildBaselineSignals().map((s) => ({
-    ...s,
-    label: s.label
-      .replace(/Localization/i, "Loc.")
-      .replace(/Confidence/i, "Conf.")
-      .replace(/Battery/i, "Batt.")
-      .replace(/Voltage/i, "V.")
-      .replace(/Velocity/i, "Vel.")
-      .replace(/Command/i, "Cmd.")
-  }));
+  const baselineSignals = buildBaselineSignals();
   const baselineEvents = useMemo(() => buildBaselineEvents(), []);
 
   return (
@@ -62,7 +51,10 @@ function CompareInner({ incident }: { incident: Incident }) {
         </div>
       </header>
       <div className="grid min-h-0 flex-1 gap-3 overflow-auto px-3 py-3 lg:grid-cols-2">
-        <section className="flex min-h-0 flex-col gap-3">
+        <section
+          data-testid="compare-side-failed"
+          className="flex min-h-0 flex-col gap-3"
+        >
           <Panel
             eyebrow="Failed run"
             title={`${incident.robot} · ${incident.detectedAt}`}
@@ -80,7 +72,10 @@ function CompareInner({ incident }: { incident: Incident }) {
           <EventStream events={events} currentMs={currentMs} onSeek={seek} />
           <TelemetryRow signals={primarySignals} cursorRatio={cursorRatio} />
         </section>
-        <section className="flex min-h-0 flex-col gap-3">
+        <section
+          data-testid="compare-side-baseline"
+          className="flex min-h-0 flex-col gap-3"
+        >
           <Panel
             eyebrow="Baseline"
             title={`${incident.robot} · 2026-04-20 10:18`}
@@ -89,7 +84,7 @@ function CompareInner({ incident }: { incident: Incident }) {
             <div className="p-3">
               <VideoPane
                 label="Forward camera"
-                source="/camera/front · 30 fps · ref"
+                source="/camera/front · 30 fps · baseline"
                 frame="frame 372 / 387"
                 timestamp={fmtClock(currentMs)}
               />

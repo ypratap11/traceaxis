@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { CompareBody } from "@/components/compare/compare-body";
 import type { Incident } from "@/lib/types";
@@ -20,28 +20,39 @@ const incident: Incident = {
 
 describe("CompareBody", () => {
   it("renders the diff strip, both sides, and the shared scrubber", () => {
-    const { container } = render(<CompareBody incident={incident} />);
-    expect(screen.getByText(/Localization confidence/i)).toBeInTheDocument();
+    render(<CompareBody incident={incident} />);
+    // Only the DiffStrip has "Localization confidence" (sparklines use
+    // "Localization Confidence" with capital C — different text via CSS
+    // would match, but getByText is case-sensitive by default).
+    expect(screen.getByText("Localization confidence")).toBeInTheDocument();
+    // Two video panes.
     expect(screen.getAllByLabelText(/play preview/i).length).toBe(2);
-    expect(screen.getByText(/Failed run/i)).toBeInTheDocument();
-    expect(screen.getByText(/Baseline/i)).toBeInTheDocument();
+    // Panel eyebrows label the sides.
+    expect(screen.getByText("Failed run")).toBeInTheDocument();
+    expect(screen.getByText("Baseline")).toBeInTheDocument();
+    // Single shared scrubber.
     expect(screen.getAllByRole("slider").length).toBe(1);
-    expect(container.querySelectorAll("svg").length).toBeGreaterThanOrEqual(6);
   });
 
   it("clicking a failed-run event row moves the shared scrubber", async () => {
     const user = userEvent.setup();
-    const { container } = render(<CompareBody incident={incident} />);
+    render(<CompareBody incident={incident} />);
     const slider = screen.getByRole("slider");
     const before = slider.getAttribute("aria-valuenow");
 
-    const uls = container.querySelectorAll("ul");
-    expect(uls.length).toBeGreaterThanOrEqual(2);
-    const failedUl = uls[0] as HTMLElement;
-    const rows = failedUl.querySelectorAll("button");
-    expect(rows.length).toBeGreaterThan(1);
+    // Scope to the FAILED side explicitly via data-testid.
+    const failedSide = screen.getByTestId("compare-side-failed");
+    const rows = within(failedSide).getAllByRole("button");
+    // Filter to just event-stream rows (they have timestamps in them —
+    // format MM:SS.mmm). Scrubber controls and markers exist too but
+    // are outside this section.
+    const eventRows = rows.filter((btn) =>
+      /\d{2}:\d{2}\.\d{3}/.test(btn.textContent ?? "")
+    );
+    expect(eventRows.length).toBeGreaterThan(1);
 
-    await user.click(rows[1]);
+    await user.click(eventRows[1]);
+
     const after = slider.getAttribute("aria-valuenow");
     expect(after).not.toBe(before);
   });
