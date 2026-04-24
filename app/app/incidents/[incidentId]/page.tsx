@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AppShell } from "@/components/app-shell";
+import { ReplayShell } from "@/components/replay/replay-shell";
 import { ReplayWorkspace } from "@/components/replay-workspace";
 import { getIncident } from "@/lib/store";
 
@@ -17,27 +17,26 @@ export default async function IncidentDetailPage({
   }
 
   return (
-    <AppShell
-      title={incident.title}
-      subtitle={incident.summary}
+    <ReplayShell
+      crumbs={["Incidents", incident.site, incident.id]}
       actions={
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <Link
             href={`/app/incidents/${incidentId}/compare`}
-            className="control-chip"
+            className="rounded-xs border border-line-strong px-3 py-1.5 text-xs font-medium text-ink-1 transition hover:border-ink-3 hover:text-ink-0"
           >
-            Compare Run
+            Compare
           </Link>
           <Link
             href={`/app/incidents/${incidentId}/summary`}
-            className="control-chip-accent"
+            className="rounded-xs bg-ink-0 px-3 py-1.5 text-xs font-semibold text-surface-0"
           >
-            View Summary
+            Open Summary
           </Link>
         </div>
       }
     >
       <ReplayWorkspace incident={incident} />
-    </AppShell>
+    </ReplayShell>
   );
 }
