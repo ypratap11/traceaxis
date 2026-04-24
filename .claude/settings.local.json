@@ -10,7 +10,8 @@
       "Bash(git commit *)",
       "Bash(git checkout *)",
       "Bash(npm run *)",
-      "Bash(git *)"
+      "Bash(git *)",
+      "Bash(cat *)"
     ]
   }
 }
