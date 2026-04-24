@@ -1,34 +1,44 @@
 import { AppShell } from "@/components/app-shell";
+import { Panel } from "@/components/primitives/panel";
+
+const workspaceDefaults = [
+  "Default timezone: America/Los_Angeles",
+  "Preferred baseline selection: same robot, same route, previous healthy run"
+];
+
+const eventTaxonomy = [
+  "E-stop, localization loss, planner timeout, network disconnect, battery sag",
+  "Future hook: custom parsers and workspace-specific event rules"
+];
 
 export default function SettingsPage() {
   return (
     <AppShell
       title="Settings"
       subtitle="Configure workspace defaults, ingestion behavior, and how TraceAxis interprets common event markers."
+      crumbs={["Settings"]}
     >
-      <div className="grid gap-5 xl:grid-cols-2">
-        <div className="panel p-5">
-          <div className="eyebrow">Workspace Defaults</div>
-          <div className="mt-5 space-y-4 text-sm text-white/60">
-            <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
-              Default timezone: America/Los_Angeles
+      <div className="grid gap-4 xl:grid-cols-2">
+        <Panel eyebrow="Workspace defaults" bodyClassName="space-y-3">
+          {workspaceDefaults.map((item) => (
+            <div
+              key={item}
+              className="rounded-sm border border-line bg-surface-1 px-3 py-2 text-sm text-ink-1"
+            >
+              {item}
             </div>
-            <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
-              Preferred baseline selection: same robot, same route, previous healthy run
+          ))}
+        </Panel>
+        <Panel eyebrow="Event taxonomy" bodyClassName="space-y-3">
+          {eventTaxonomy.map((item) => (
+            <div
+              key={item}
+              className="rounded-sm border border-line bg-surface-1 px-3 py-2 text-sm text-ink-1"
+            >
+              {item}
             </div>
-          </div>
-        </div>
-        <div className="panel p-5">
-          <div className="eyebrow">Event Taxonomy</div>
-          <div className="mt-5 space-y-4 text-sm text-white/60">
-            <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
-              E-stop, localization loss, planner timeout, network disconnect, battery sag
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
-              Future hook: custom parsers and workspace-specific event rules
-            </div>
-          </div>
-        </div>
+          ))}
+        </Panel>
       </div>
     </AppShell>
   );

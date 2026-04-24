@@ -31,22 +31,7 @@ const config: Config = {
         ok: "#5cd6a8",
         warn: "#ffc857",
         err: "#ff6e7a",
-        info: "#7ab7ff",
-        // Legacy aliases — kept until Plan 5 strips remaining old-class usage.
-        graphite: {
-          950: "#06070b",
-          900: "#0d1017",
-          850: "#121722",
-          800: "#171d29",
-          700: "#20283a"
-        },
-        accent: {
-          400: "#4cf2c5",
-          500: "#17c79d",
-          600: "#109a79"
-        },
-        danger: "#ff6e7a",
-        warning: "#ffc857"
+        info: "#7ab7ff"
       },
       fontFamily: {
         sans: ["var(--font-plex-sans)", "system-ui", "sans-serif"],
@@ -64,9 +49,7 @@ const config: Config = {
       },
       boxShadow: {
         bloom: "0 0 12px rgba(255,159,80,0.5)",
-        "bloom-strong": "0 0 16px rgba(255,159,80,0.7)",
-        // Legacy alias
-        panel: "0 0 0 1px rgba(255,255,255,0.06), 0 20px 60px rgba(0,0,0,0.35)"
+        "bloom-strong": "0 0 16px rgba(255,159,80,0.7)"
       },
       keyframes: {
         breath: {

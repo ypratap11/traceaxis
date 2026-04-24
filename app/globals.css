@@ -23,15 +23,6 @@
   --info: #7ab7ff;
 
   --ease-out: cubic-bezier(0.32, 0.72, 0, 1);
-
-  /* Legacy aliases — kept until Plan 5 strips old-class usage. */
-  --bg-0: #06070b;
-  --bg-1: #0d1118;
-  --bg-2: #121826;
-  --panel: rgba(12, 16, 24, 0.84);
-  --panel-strong: rgba(18, 25, 38, 0.92);
-  --copy: var(--ink-0);
-  --muted: var(--ink-2);
 }
 
 html,
@@ -56,6 +47,17 @@ body {
   color: var(--ink-0);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @layer base {
   h1,
   h2,
@@ -67,84 +69,5 @@ body {
 
   p {
     color: var(--ink-1);
-  }
-}
-
-/*
- * Legacy utility classes — kept so existing screens still render during the
- * incremental rebuild. These are removed in the final UI redesign plan once
- * every screen has been migrated to the new component primitives.
- */
-@layer components {
-  .panel {
-    @apply rounded-lg border;
-    background: var(--surface-1);
-    border-color: var(--line);
-  }
-
-  .panel-muted {
-    @apply rounded-md border;
-    background: var(--surface-1);
-    border-color: var(--line);
-  }
-
-  .panel-interactive {
-    @apply rounded-md border transition;
-    background: var(--surface-1);
-    border-color: var(--line);
-  }
-
-  .panel-interactive:hover {
-    border-color: var(--line-strong);
-  }
-
-  .eyebrow {
-    @apply text-[10px] font-semibold uppercase tracking-[0.22em];
-    color: var(--ink-3);
-  }
-
-  .kpi {
-    @apply rounded-md border px-4 py-4;
-    background: var(--surface-1);
-    border-color: var(--line);
-  }
-
-  .status-dot {
-    @apply inline-block h-2 w-2 rounded-full;
-  }
-
-  .control-chip {
-    @apply inline-flex items-center gap-2 rounded-sm border px-3 py-1.5 text-xs font-medium transition;
-    background: transparent;
-    border-color: var(--line-strong);
-    color: var(--ink-1);
-  }
-
-  .control-chip:hover {
-    border-color: var(--ink-3);
-    color: var(--ink-0);
-  }
-
-  .control-chip-accent {
-    @apply inline-flex items-center gap-2 rounded-sm px-3 py-1.5 text-xs font-semibold transition;
-    background: var(--ink-0);
-    color: var(--surface-0);
-  }
-
-  .metric-tile {
-    @apply rounded-md border p-4;
-    background: var(--surface-1);
-    border-color: var(--line);
-  }
-
-  .field-shell {
-    @apply rounded-sm border px-3 py-2 outline-none transition;
-    background: var(--surface-1);
-    border-color: var(--line);
-  }
-
-  .field-shell:focus {
-    border-color: var(--data-bloom);
-    box-shadow: 0 0 0 3px var(--data-bloom-soft);
   }
 }
