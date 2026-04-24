@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
-import { IncidentSummaryCard } from "@/components/incident-summary";
-import { eventMarkers } from "@/lib/data";
+import { SummaryBody } from "@/components/summary/summary-body";
 import { getIncident } from "@/lib/store";
 
 export default async function IncidentSummaryPage({
@@ -19,41 +18,19 @@ export default async function IncidentSummaryPage({
 
   return (
     <AppShell
-      title={`Summary: ${incident.title}`}
-      subtitle="Capture the failure narrative, supporting evidence, and internal notes before sharing the incident internally."
+      title="Incident summary"
+      subtitle="Capture the failure narrative, supporting evidence, and internal notes before sharing the incident."
+      crumbs={["Incidents", incident.site, incident.id, "Summary"]}
       actions={
-        <div className="flex gap-3">
-          <Link
-            href={`/app/incidents/${incidentId}`}
-            className="control-chip"
-          >
-            Back To Replay
-          </Link>
-          <button className="control-chip-accent">
-            Export Report
-          </button>
-        </div>
+        <Link
+          href={`/app/incidents/${incidentId}`}
+          className="rounded-xs border border-line-strong px-3 py-1.5 text-xs font-medium text-ink-1 transition hover:border-ink-3 hover:text-ink-0"
+        >
+          Back to Replay
+        </Link>
       }
     >
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
-        <IncidentSummaryCard />
-        <div className="panel p-5">
-          <div className="eyebrow">Key Moments</div>
-          <div className="mt-4 space-y-3">
-            {eventMarkers.map((marker) => (
-              <div
-                key={marker.id}
-                className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3"
-              >
-                <div className="flex items-center justify-between text-sm">
-                  <span className="font-medium text-white">{marker.label}</span>
-                  <span className="font-mono text-white/45">{marker.timestamp}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <SummaryBody incident={incident} />
     </AppShell>
   );
 }

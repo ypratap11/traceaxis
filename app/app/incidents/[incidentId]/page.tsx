@@ -5,16 +5,21 @@ import { ReplayWorkspace } from "@/components/replay-workspace";
 import { getIncident } from "@/lib/store";
 
 export default async function IncidentDetailPage({
-  params
+  params,
+  searchParams
 }: {
   params: Promise<{ incidentId: string }>;
+  searchParams: Promise<{ t?: string }>;
 }) {
   const { incidentId } = await params;
+  const { t } = await searchParams;
   const incident = await getIncident(incidentId);
 
   if (!incident) {
     notFound();
   }
+
+  const initialMs = t ? Math.max(0, Number.parseInt(t, 10) || 0) : undefined;
 
   return (
     <ReplayShell
@@ -36,7 +41,7 @@ export default async function IncidentDetailPage({
         </div>
       }
     >
-      <ReplayWorkspace incident={incident} />
+      <ReplayWorkspace incident={incident} initialMs={initialMs} />
     </ReplayShell>
   );
 }

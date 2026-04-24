@@ -98,12 +98,22 @@ function ReplayBody({ incident }: { incident: Incident }) {
   );
 }
 
-export function ReplayWorkspace({ incident }: { incident: Incident }) {
+export function ReplayWorkspace({
+  incident,
+  initialMs
+}: {
+  incident: Incident;
+  initialMs?: number;
+}) {
   const events = useMemo(() => toScrubberEvents(eventMarkers), []);
   const durationMs = useMemo(() => inferDurationMs(events), [events]);
 
   return (
-    <ReplayProvider events={events} durationMs={durationMs}>
+    <ReplayProvider
+      events={events}
+      durationMs={durationMs}
+      initialMs={initialMs}
+    >
       <ReplayBody incident={incident} />
     </ReplayProvider>
   );
